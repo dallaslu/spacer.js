@@ -1,9 +1,17 @@
 /*
  * https://www.unicode.org/Public/5.0.0/ucd/Unihan.html
  */
+
 const CJK = '[\u2E80-\uFE4F]';
 const SYMOLS = '@&=_\$%\^\*\-+';
 const LATIN = '[A-Za-z0-9\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF]';
+const ONE_OR_MORE_SPACE = '[ ]+';
+const ENDS_WITH_CJK_AND_SPACING = new RegExp(`${CJK}${ONE_OR_MORE_SPACE}$`);
+const ENDS_WITH_LATIN_AND_SPACING = new RegExp(`${LATIN}${ONE_OR_MORE_SPACE}$`);
+const ENDS_WITH_CJK = new RegExp(`${CJK}$`);
+const ENDS_WITH_LATIN = new RegExp(`${LATIN}$`);
+const STARTS_WITH_CJK = new RegExp(`^${CJK}`);
+const STARTS_WITH_LATIN = new RegExp(`^${LATIN}`);
 const PATTERN_DEFAULT = new RegExp(`(?<=${LATIN})(?=${CJK})|(?<=${CJK})(?=${LATIN})`, 'g');
 const PATTERN_SPACE = new RegExp(`(?<=${LATIN})(?=[ ]*${CJK})|(?<=${CJK})(?=[ ]*${LATIN})|(?<=${CJK}[ ]*)(?=${LATIN})|(?<=${LATIN}[ ]*)(?=${CJK})`, 'g');
 
@@ -58,6 +66,26 @@ class Spacer {
 
     resolveOptions(options) {
         return options ? handleOptions(options) : this.options;
+    }
+
+    static endsWithCJKAndSpacing(text) {
+        return ENDS_WITH_CJK_AND_SPACING.test(text);
+    }
+
+    static endsWithCJK(text){
+        return ENDS_WITH_CJK.test(text);
+    }
+
+    static endsWithLatin(text){
+        return ENDS_WITH_LATIN.test(text);
+    }
+
+    static startsWithCJK(text){
+        return STARTS_WITH_CJK.test(text);
+    }
+
+    static startsWithLatin(text){
+        return STARTS_WITH_LATIN.test(text);
     }
 }
 
