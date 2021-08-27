@@ -1,8 +1,21 @@
 /*
  * https://www.unicode.org/Public/5.0.0/ucd/Unihan.html
  */
-
-const CJK = '\u2E80-\uFE4F';
+/*
+ * \u2E80-\u2EFF    CJK 部首
+ * \u2F00-\u2FDF    康熙字典部首
+ * \u3000-\u303F    CJK 符号和标点
+ * \u31C0-\u31EF	CJK 笔画
+ * \u3200-\u32FF	封闭式 CJK 文字和月份
+ * \u3300-\u33FF	CJK 兼容
+ * \u3400-\u4DBF	CJK 统一表意符号扩展 A
+ * \u4DC0-\u4DFF	易经六十四卦符号
+ * \u4E00-\u9FBF	CJK 统一表意符号
+ * \uF900-\uFAFF	CJK 兼容象形文字
+ * \uFE30-\uFE4F	CJK 兼容形式
+ * \uFF00-\uFFEF	全角ASCII、全角标点
+ */
+const CJK = '\u2E80-\u2FDF\u31C0-\uFE4F';
 const CJK_PATTERN = `[${CJK}]`;
 const SYMOLS = '@&=_\$%\^\*\-+';
 const LATIN = 'A-Za-z0-9\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF';
