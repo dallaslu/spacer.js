@@ -83,7 +83,7 @@ When `false`:
 2. `中文____ABC` -> `中文____ABC`(`_` as blank)
 #### `forceUnifiedSpacing`
 Replace all spacings with `spacingContent` value or wrapper. Only works `handleOriginalSpace` is `true`.
-1. `中文____ABC` -> `中文_ABC`(`_` as blank)
+1. `中文ABC` -> `中文<spacer> </spacer>ABC`
 2. `中文____ABC` -> `中文<spacer>_</spacer>ABC`(`_` as blank)
 
 #### `keepOriginalSpace`
