@@ -21,7 +21,7 @@ Typographical word spacing
     <script type="module" src="../src/spacer.js"></script>
 </head>
 <body>
-<img alt="时髦的人都好Fancy"/>
+<img alt="时髦人都好fancy"/>
 <p>Today你eat了吗？</p>
 <script>
     window.addEventListener('load', function(){
