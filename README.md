@@ -18,24 +18,23 @@ Typographical word spacing
             content: '';
         }
     </style>
-    <script type="module" src="dist/spacer.min.js"></script>
+    <script src="dist/spacer.min.js"></script>
 </head>
 <body>
 <img alt="时髦人都好fancy"/>
 <p>Today你eat了吗？</p>
 <script>
-    window.addEventListener('load', function(){
-        let spacer = new Spacer({
-            wrapper:{
-                open: '<spacer>',
-                close: '</spacer>'
-            },
-            spacingContent: ' ',
-            handleOriginalSpace: true,
-            forceUnifiedSpacing: true
-        });
-        spacer.spacePage();
+    let spacer = new Spacer({
+        wrapper:{
+            open: '<spacer>',
+            close: '</spacer>'
+        },
+        spacingContent: ' ',
+        handleOriginalSpace: true,
+        forceUnifiedSpacing: true
     });
+    console.log(spacer.space('中文ABC'));
+    spacer.spacePage();
 </script>
 </body>
 </html>
