@@ -37,7 +37,7 @@ function spaceNode(spacer, node, options) {
         if (Spacer.endsWithCJK(preText) && Spacer.startsWithLatin(node.textContent)
             || Spacer.endsWithLatin(preText) && Spacer.startsWithCJK(node.textContent)) {
             let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : '';
-            node.parentNode.insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+            insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
         }
         if (optionsEffect.handleOriginalSpace && node.previousSibling.nodeType === Node.TEXT_NODE) {
             if (Spacer.endsWithCJKAndSpacing(preText) && Spacer.startsWithLatin(node.textContent)
@@ -47,7 +47,7 @@ function spaceNode(spacer, node, options) {
                 node.previousSibling.data = arr[1];
                 preEndSpacing = arr[2];
                 let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (optionsEffect.keepOriginalSpace ? preEndSpacing : '');
-                node.parentNode.insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+                insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
             }
         }
     }
@@ -61,11 +61,11 @@ function spaceNode(spacer, node, options) {
                 let isSpacing = /^[ ]*$/.test(arr[i]);
                 if (isSpacing || (i != 0 && !/^[ ]*$/.test(arr[i - 1]))) {
                     let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (isSpacing && optionsEffect.keepOriginalSpace) ? arr[i] : '';
-                    node.parentNode.insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+                    insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
                 }
 
                 if (!isSpacing) {
-                    node.parentNode.insertBefore(document.createTextNode(arr[i]), node);
+                    insertBefore(document.createTextNode(arr[i]), node);
                 }
             }
             node.remove();
@@ -99,6 +99,12 @@ function createNode(html) {
     let div = document.createElement('div');
     div.innerHTML = html;
     return div.firstChild;
+}
+
+function insertBefore(newNode, node){
+    if(node.tagName !== 'HTML' && node.parentNode && node.parentNode.tagName !== 'HTML'){
+        node.parentNode.insertBefore(newNode, node);
+    }
 }
 
 function spaceAttribute(spacer, node, attr, options) {
