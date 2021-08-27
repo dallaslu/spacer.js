@@ -8,13 +8,17 @@ class BrowserSpacer extends Spacer {
 
     constructor(options) {
         super(options);
-        this.options.spacingContent = this.options.spacingContent.replace(' ', '&nbsp;');
+        if (options.wrapper) {
+            this.options.spacingContent = this.options.spacingContent.replace(' ', '&nbsp;');
+        }
     }
 
     spacePage(elements, options) {
         elements = typeof elements === 'string' ? document.querySelectorAll(elements) : (elements || [document.childNodes[1]]);
         options = this.resolveOptions(options);
-        options.spacingContent = options.spacingContent.replace(' ', '&nbsp;');
+        if (options.wrapper) {
+            options.spacingContent = options.spacingContent.replace(' ', '&nbsp;');
+        }
         [].forEach.call(elements, e => {
             spaceNode(this, e, options);
         });
@@ -40,8 +44,12 @@ function spaceNode(spacer, node, options) {
         let preText = node.previousSibling.nodeType === Node.TEXT_NODE ? node.previousSibling.data : node.previousSibling.textContent;
         if ((Spacer.endsWithCJK(preText) || Spacer.endsWithSymbolsNeedSpaceFollowed(preText)) && Spacer.startsWithLatin(node.textContent)
             || (Spacer.endsWithLatin(preText) || Spacer.endsWithSymbolsNeedSpaceFollowed(preText)) && Spacer.startsWithCJK(node.textContent)) {
-            let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : '';
-            insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+            let spaceContent = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : '';
+            if (optionsEffect.wrapper) {
+                insertBefore(createNode(optionsEffect.wrapper.open + spaceContent + optionsEffect.wrapper.close), node);
+            } else {
+                insertBefore(document.createTextNode(spaceContent ? spaceContent : optionsEffect.spacingContent)), node);
+            }
         }
         if (optionsEffect.handleOriginalSpace && node.previousSibling.nodeType === Node.TEXT_NODE) {
             if (Spacer.endsWithCJKAndSpacing(preText) && Spacer.startsWithLatin(node.textContent)
@@ -50,8 +58,12 @@ function spaceNode(spacer, node, options) {
                 let arr = /(.*)([ ]+)$/g.match(node.previousSibling.data);
                 node.previousSibling.data = arr[1];
                 preEndSpacing = arr[2];
-                let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (optionsEffect.keepOriginalSpace ? preEndSpacing : '');
-                insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+                let spaceContent = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (optionsEffect.keepOriginalSpace ? preEndSpacing : '');
+                if (optionsEffect.wrapper) {
+                    insertBefore(createNode(optionsEffect.wrapper.open + spaceContent + optionsEffect.wrapper.close), node);
+                } else {
+                    insertBefore(document.createTextNode(spaceContent ? spaceContent : optionsEffect.spacingContent), node);
+                }
             }
         }
     }
@@ -64,8 +76,8 @@ function spaceNode(spacer, node, options) {
             for (let i = 0; i < arr.length; i++) {
                 let isSpacing = /^[ ]*$/.test(arr[i]);
                 if (isSpacing || (i != 0 && !/^[ ]*$/.test(arr[i - 1]))) {
-                    let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (isSpacing && optionsEffect.keepOriginalSpace) ? arr[i] : '';
-                    insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+                    let spaceContent = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (isSpacing && optionsEffect.keepOriginalSpace) ? arr[i] : '';
+                    insertBefore(createNode(optionsEffect.wrapper.open + spaceContent + optionsEffect.wrapper.close), node);
                 }
                 if (!isSpacing) {
                     insertBefore(document.createTextNode(arr[i]), node);
