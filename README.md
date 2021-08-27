@@ -75,8 +75,8 @@ spacer::after {
 Handle original space. Only works with `wrapper`.
 
 When `true`:
-1. `中文 ABC` -> `中文<spacer> </spacer>ABC`
-2. `中文____ABC` -> `中文<spacer>_</spacer>ABC`(`_` as blank)
+1. `中文 ABC` -> `中文<spacer></spacer>ABC`
+2. `中文____ABC` -> `中文<spacer></spacer>ABC`(`_` as blank)
 
 When `false`:
 1. `中文 ABC` -> `中文 ABC`
