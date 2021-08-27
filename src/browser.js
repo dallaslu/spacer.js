@@ -38,8 +38,8 @@ function spaceNode(spacer, node, options) {
         && (!node.previousSibling.tagName || (!BLOCK_TAGS.test(node.previousSibling.tagName) && !SPACING_TAGS.test(node.previousSibling.tagName)))
         && (!node.tagName || (!BLOCK_TAGS.test(node.tagName) && !SPACING_TAGS.test(node.tagName)))) {
         let preText = node.previousSibling.nodeType === Node.TEXT_NODE ? node.previousSibling.data : node.previousSibling.textContent;
-        if (Spacer.endsWithCJK(preText) && Spacer.startsWithLatin(node.textContent)
-            || Spacer.endsWithLatin(preText) && Spacer.startsWithCJK(node.textContent)) {
+        if ((Spacer.endsWithCJK(preText) || Spacer.endsWithSymbolsNeedSpaceFollowed(preText)) && Spacer.startsWithLatin(node.textContent)
+            || (Spacer.endsWithLatin(preText) || Spacer.endsWithSymbolsNeedSpaceFollowed(preText)) && Spacer.startsWithCJK(node.textContent)) {
             let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : '';
             insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
         }
@@ -67,7 +67,6 @@ function spaceNode(spacer, node, options) {
                     let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (isSpacing && optionsEffect.keepOriginalSpace) ? arr[i] : '';
                     insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
                 }
-
                 if (!isSpacing) {
                     insertBefore(document.createTextNode(arr[i]), node);
                 }
