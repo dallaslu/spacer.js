@@ -55,7 +55,8 @@ Typographical word spacing
 #### `spacingContent`
 Spacing content.
 1. `中文ABC` -> `中文 ABC`
-2. `Global世界` -> `Global 世界`
+2. `中文 ABC` -> `中文 ABC`
+3. `中文____ABC` -> `中文_ABC`(`_` as blank)
 #### `wrapper`
 Html wrapper tag.
 ```css
