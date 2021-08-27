@@ -1,6 +1,8 @@
 import Spacer from './core.js'
 
 const IGNORED_TAGS = /^(script|link|style)$/i;
+const BLOCK_TAGS = /^(div|p|h1|h2|h3|h4|h5|h6|blockqoute|pre|textarea|nav|header|main|footer|section|sidbar|aside|table)$/i;
+const SPACING_TAGS = /^(br|hr|img|video|audio)$/i;
 
 class BrowserSpacer extends Spacer {
 
@@ -32,7 +34,9 @@ function spaceNode(spacer, node, options) {
     if (node.parentNode && node.parentNode.tagName === 'TITLE') {
         optionsEffect = optionsNoWrapperNoHTMLEntity;
     }
-    if (node.previousSibling) {
+    if (node.previousSibling
+        && (!node.previousSibling.tagName || (!BLOCK_TAGS.test(node.previousSibling.tagName) && !SPACING_TAGS.test(node.previousSibling.tagName)))
+        && (!node.tagName || (!BLOCK_TAGS.test(node.tagName) && !SPACING_TAGS.test(node.tagName)))) {
         let preText = node.previousSibling.nodeType === Node.TEXT_NODE ? node.previousSibling.data : node.previousSibling.textContent;
         if (Spacer.endsWithCJK(preText) && Spacer.startsWithLatin(node.textContent)
             || Spacer.endsWithLatin(preText) && Spacer.startsWithCJK(node.textContent)) {
@@ -101,8 +105,8 @@ function createNode(html) {
     return div.firstChild;
 }
 
-function insertBefore(newNode, node){
-    if(node.tagName !== 'HTML' && node.parentNode && node.parentNode.tagName !== 'HTML'){
+function insertBefore(newNode, node) {
+    if (node.tagName !== 'HTML' && node.parentNode && node.parentNode.tagName !== 'HTML') {
         node.parentNode.insertBefore(newNode, node);
     }
 }
