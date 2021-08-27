@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Spacer分隔器</title>
+    <style>
+        spacer {
+            width: .25em;
+            display: inline-block;
+        }
+
+        spacer::after {
+            content: '';
+        }
+    </style>
+    <script type="module" src="../dist/spacer.js"></script>
+</head>
+<body>
+<header>
+    <h1>Spacer隔离器</h1>
+</header>
+<main>
+    <h2>一、中文示例</h2>
+    <h3>1. 常规</h3>
+    <p><a href="https://github.com/sparanoid/chinese-copywriting-guidelines">中文文案排版指北</a></p>
+    <h4>a. 中英文之间需要增加空格</h4>
+    <p>在LeanCloud上，数据存储是围绕AVObject进行的。每个AVObject都包含了与JSON兼容的key-value对应的数据。数据是schema-free的，你不需要在每个AVObject上提前指定存在哪些键，只要直接设定对应的key-value即可。</p>
+    <h4>b. 中文与数字之间需要增加空格</h4>
+    <p>今天出去买菜花了5000元。</p>
+    <h4>c. 全角标点与其他字符之间不加空格</h4>
+    <p>刚刚买了一部iPhone，好开心！</p>
+    <p>但是，iPhone的刘海有点儿大！Android倒是有屏占比更大的型号。But iPhone is iPhone! 尤其当你读过《This book does not exsit》，你就会不再怀念BlackBerry、WebOS的手机。</p>
+    <h4>d. 百分比与数字之间不需要增加空格</h4>
+    <p>新MacBook Pro有15%的CPU性能提升。</p>
+    <h4>e. 半角逗号、冒号、点号，之前不需要加空格，之后需要加空格；若处于段尾则不需要空格。</h4>
+    <p>He said:Let part of people get rich first!</p>
+    <p>He said,<span style="color: blue">Let part of people get rich first!</span></p>
+    <h3>2. 大字体</h3>
+    <p style="font-size: 2rem">中文ABC，世界World，Global全球500强，100%纯牛奶。</p>
+    <h3>3. 图片ALT文本</h3>
+    <img alt="时髦人都很fancy"/>
+    <h3>4. 标签（span/font等）混排</h3>
+    <p>中文<span style="color:#333">ABC</span>，<span style="color:blue">世界</span>World，<span
+            style="color:red">Global</span><span style="color: deeppink">全球500强</span>，100%纯牛奶。</p>
+    <h3>5. text-align: justify</h3>
+    <p style="width: 150px; text-align: justify">中文ABC，世界World，Global全球500强，100%纯牛奶。</p>
+    <p style="width: 150px; text-align: justify">中文<span style="color:#333">ABC</span>，<span style="color:blue">世界</span>World，<span
+            style="color:red">Global</span><span style="color: deeppink">全球500强</span>，100%纯牛奶。</p>
+    <h3>6. 其他</h3>
+    <p><strong>pre</strong></p>
+    <pre>中文ABC，世界World，Global全球500强，100%纯牛奶。</pre>
+    <p><strong>textarea</strong></p>
+    <textarea>中文ABC，世界World，Global全球500强，100%纯牛奶。</textarea>
+    <p><strong>input</strong></p>
+    <input value="中文ABC，世界World，Global全球500强，100%纯牛奶。" style="width: 100%"/>
+    <p><strong>button</strong></p>
+    <p>input:</p>
+    <input value="中文ABC，世界World，Global全球500强，100%纯牛奶。" type="button"/>
+    <p>button:</p>
+    <button>中文ABC，世界World，Global全球500强，100%纯牛奶。</button>
+    <p><strong>checkbox</strong></p>
+    <label><input type="checkbox"/>中文ABC，世界World，Global全球500强，100%纯牛奶。</label>
+    <p><strong>radio</strong></p>
+    <label><input type="radio"/>中文ABC，世界World，Global全球500强，100%纯牛奶。</label>
+    <p><strong>placeholder</strong></p>
+    <input placeholder="中文ABC，世界World，Global全球500强，100%纯牛奶。" style="width: 100%"/>
+    <p><strong>select</strong></p>
+    <select>
+        <optgroup label="中文ABC">
+            <option>中文ABC，世界World，Global全球500强，100%纯牛奶。</option>
+            <option>中文ABC，世界World，Global全球500强，100%纯牛奶。</option>
+        </optgroup>
+    </select>
+    <p><strong>code</strong></p>
+    <code>中文ABC，世界World，Global全球500强，100%纯牛奶。</code>
+    <p><strong>blockqoute</strong></p>
+    <blockquote>中文ABC，世界World，Global全球500强，100%纯牛奶。</blockquote>
+    <p><strong>ul</strong></p>
+    <ul>
+        <li>中文ABC，世界World，Global全球500强，100%纯牛奶。</li>
+    </ul>
+    <p><strong>contenteditable</strong></p>
+    <div contenteditable="true" style="border:#333 1px solid; width: 50%; height: 200px;">中文ABC，世界World，Global全球500强，100%纯牛奶。</div>
+    <h2>二、日本語</h2>
+    <p>ワールドWorld、Globalグローバル500、100%純粋なミルク。 </p>
+    <h2>三、한국인</h2>
+    <p>세계World, Global세계500위권, 100%순우유.</p>
+</main>
+<script>
+    window.addEventListener('load', function () {
+        let spacer = new Spacer({
+            forceUnifiedSpacing: true
+        });
+        spacer.spacePage();
+    });
+</script>
+</body>
+</html>
