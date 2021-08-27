@@ -88,5 +88,6 @@ Replace all spacings with `spacingContent` value or wrapper. Only works `handleO
 
 #### `keepOriginalSpace`
 Only works when `forceUnifiedSpacing` is `false` and `handleOriginalSpace` is `true`.
-1. `中文____ABC` -> `中文____ABC`(`_` as blank)
-2. `中文____ABC` -> `中文<spacer>____</spacer>ABC`(`_` as blank)
+1. `中文ABC` -> `中文<spacer></spacer>ABC`
+2. `中文 ABC` -> `中文<spacer> </spacer>ABC`
+3. `中文____ABC` -> `中文<spacer>____</spacer>ABC`(`_` as blank)
