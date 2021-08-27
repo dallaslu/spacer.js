@@ -20,7 +20,7 @@ class BrowserSpacer extends Spacer {
 }
 
 function spaceNode(spacer, node, options) {
-    if(node.tagName && IGNORED_TAGS.test(node.tagName)){
+    if (node.tagName && IGNORED_TAGS.test(node.tagName)) {
         return;
     }
     let optionsNoWrapper = Object.assign({}, options, {wrapper: false});
@@ -31,6 +31,25 @@ function spaceNode(spacer, node, options) {
     let optionsEffect = options;
     if (node.parentNode && node.parentNode.tagName === 'TITLE') {
         optionsEffect = optionsNoWrapperNoHTMLEntity;
+    }
+    if (node.previousSibling) {
+        let preText = node.previousSibling.nodeType === Node.TEXT_NODE ? node.previousSibling.data : node.previousSibling.textContent;
+        if (Spacer.endsWithCJK(preText) && Spacer.startsWithLatin(node.textContent)
+            || Spacer.endsWithLatin(preText) && Spacer.startsWithCJK(node.textContent)) {
+            let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : '';
+            node.parentNode.insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+        }
+        if (optionsEffect.handleOriginalSpace && node.previousSibling.nodeType === Node.TEXT_NODE) {
+            if (Spacer.endsWithCJKAndSpacing(preText) && Spacer.startsWithLatin(node.textContent)
+                || Spacer.endsWithLatinAndSpacing(preText) && Spacer.startsWithCJK(node.textContent)) {
+                let preEndSpacing = '';
+                let arr = /(.*)([ ]+)$/g.match(node.previousSibling.data);
+                node.previousSibling.data = arr[1];
+                preEndSpacing = arr[2];
+                let spaceInnerHTML = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (optionsEffect.keepOriginalSpace ? preEndSpacing : '');
+                node.parentNode.insertBefore(createNode(optionsEffect.wrapper.open + spaceInnerHTML + optionsEffect.wrapper.close), node);
+            }
+        }
     }
     if (node.nodeType === Node.TEXT_NODE) {
         if (optionsEffect.wrapper) {
@@ -62,35 +81,21 @@ function spaceNode(spacer, node, options) {
         // tag name filter
         spaceAttribute(spacer, node, 'title', optionsNoWrapperNoHTMLEntity);
         spaceAttribute(spacer, node, 'alt', optionsNoWrapperNoHTMLEntity);
-
-        if(node.previousSibling){
-            if(node.previousSibling.nodeType === Node.TEXT_NODE){
-                if(Spacer.endsWithCJK(node.previousSibling.data) && Spacer.startsWithLatin(node.textContent)
-                 ||Spacer.endsWithLatin(node.previousSibling.data) && Spacer.startsWithCJK(node.textContent)){
-                    // TODO wrap original spaces
-                    node.parentNode.insertBefore(createNode(optionsEffect.wrapper.open + optionsEffect.wrapper.close), node);
-                }
-            }else{
-                if(Spacer.endsWithCJK(node.previousSibling.textContent) && Spacer.startsWithLatin(node.textContent)
-                    ||Spacer.endsWithLatin(node.previousSibling.textContent) && Spacer.startsWithCJK(node.textContent)){
-                    // TODO wrap original spaces
-                    node.parentNode.insertBefore(createNode(optionsEffect.wrapper.open + optionsEffect.wrapper.close), node);
-                }
-            }
-        }
+        spaceAttribute(spacer, node, 'label', optionsNoWrapperNoHTMLEntity);
+        spaceAttribute(spacer, node, 'placeholder', optionsNoWrapperNoHTMLEntity);
     }
     if (node.childNodes) {
-        let staticNodeList = [];
+        let staticNodes = [];
         node.childNodes.forEach(child => {
-            staticNodeList.push(child);
+            staticNodes.push(child);
         });
-        staticNodeList.forEach(child=>{
+        staticNodes.forEach(child => {
             spaceNode(spacer, child, options);
         });
     }
 }
 
-function createNode(html){
+function createNode(html) {
     let div = document.createElement('div');
     div.innerHTML = html;
     return div.firstChild;
