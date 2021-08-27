@@ -72,22 +72,23 @@ spacer::after {
 2. `Global世界` -> `Global<spacer></spacer>世界`
 
 #### `handleOriginalSpace`
-Handle original space. Only works with `wrapper`.
+Handle original space. 
 
 When `true`:
-1. `中文 ABC` -> `中文<spacer></spacer>ABC`
-2. `中文____ABC` -> `中文<spacer></spacer>ABC`(`_` as blank)
+1. `中文___ABC` -> `中文_ABC`(No wrapper case, `_` as blank)
+2. `中文 ABC` -> `中文<spacer></spacer>ABC`
+3. `中文____ABC` -> `中文<spacer></spacer>ABC`(`_` as blank)
 
 When `false`:
 1. `中文 ABC` -> `中文 ABC`
 2. `中文____ABC` -> `中文____ABC`(`_` as blank)
 #### `forceUnifiedSpacing`
-Replace all spacings with `spacingContent` value or wrapper. Only works `handleOriginalSpace` is `true`.
-1. `中文ABC` -> `中文<spacer> </spacer>ABC`
+Replace all spacings with `spacingContent` value or wrapper. Only works when `handleOriginalSpace` is `true` and `wrapper`.
+1. ###### `中文ABC` -> `中文<spacer> </spacer>ABC`
 2. `中文____ABC` -> `中文<spacer>_</spacer>ABC`(`_` as blank)
 
 #### `keepOriginalSpace`
-Only works when `forceUnifiedSpacing` is `false` and `handleOriginalSpace` is `true`.
+Only works when `forceUnifiedSpacing` is `false` and `handleOriginalSpace` is `true` and `wrapper`.
 1. `中文ABC` -> `中文<spacer></spacer>ABC`
 2. `中文 ABC` -> `中文<spacer> </spacer>ABC`
 3. `中文____ABC` -> `中文<spacer>____</spacer>ABC`(`_` as blank)
