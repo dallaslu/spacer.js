@@ -26,6 +26,7 @@ const ONE_LATIN_LIKE = `[${LATIN}%]`;
 const SPLIT_BEFORE_SPACE = `(?<=${ONE_LATIN_LIKE})(?=[ ]*${ONE_AJK})|(?<=${ONE_AJK})(?=[ ]*${ONE_LATIN_LIKE})`;
 const SPLIT_AFTER_SPACE = `(?<=${ONE_AJK}[ ]*)(?=${ONE_LATIN_LIKE})|(?<=${ONE_LATIN_LIKE}[ ]*)(?=${ONE_AJK})`;
 const SPLIT_SYMBOLS_NEED_SPACE_FOLLOWED = `(?<=${SYMBOLS_NEED_SPACE_FOLLOWED})(?=${ONE_AJK}|${ONE_LATIN})`;
+const REGEXP_ANY_CJK = new RegExp(`${ONE_AJK}`);
 const REGEXP_ENDS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED = new RegExp(`${SYMBOLS_NEED_SPACE_FOLLOWED}$`);
 const REGEXP_ENDS_WITH_CJK_AND_SPACING = new RegExp(`${ONE_AJK}${ONE_OR_MORE_SPACE}$`);
 const REGEXP_ENDS_WITH_LATIN_AND_SPACING = new RegExp(`${ONE_LATIN_LIKE}${ONE_OR_MORE_SPACE}$`);
@@ -78,7 +79,7 @@ class Spacer {
 
     split(text, options) {
         options = this.resolveOptions(options);
-        if (typeof text === 'string') {
+        if (typeof text === 'string' && REGEXP_ANY_CJK.test(text)) {
             let pattern = options.handleOriginalSpace ? REGEXP_SPLIT_SPACE : REGEXP_SPLIT_DEFAULT;
             return text.split(pattern);
         }
