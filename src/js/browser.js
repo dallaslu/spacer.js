@@ -48,7 +48,7 @@ function spaceNode(spacer, node, options) {
             if (optionsEffect.wrapper) {
                 insertBefore(createNode(optionsEffect.wrapper.open + spaceContent + optionsEffect.wrapper.close), node);
             } else {
-                insertBefore(document.createTextNode(spaceContent ? spaceContent : optionsEffect.spacingContent)), node);
+                insertBefore(document.createTextNode(spaceContent ? spaceContent : optionsEffect.spacingContent), node);
             }
         }
         if (optionsEffect.handleOriginalSpace && node.previousSibling.nodeType === Node.TEXT_NODE) {
