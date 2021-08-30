@@ -1,0 +1,8 @@
+spacer {
+  width: .25em;
+  display: inline-block;
+
+  &::after {
+    content: '';
+  }
+}
