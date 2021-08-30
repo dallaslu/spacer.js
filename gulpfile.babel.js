@@ -23,6 +23,7 @@ import dele from 'delete';
 import autoprefixer from 'gulp-autoprefixer';
 import through from "through2";
 import path from "path";
+import htmlreplace from 'gulp-html-replace';
 
 import browserSync from 'browser-sync';
 
@@ -30,30 +31,41 @@ import browserSync from 'browser-sync';
 const src = {
     root: 'src/',
     docs: 'src/docs',
-    docStyles: 'src/docs/assets/scss/**/*.scss',
-    scripts: 'src/**/*.js',
+    docsScripts: 'src/docs/assets/js/**/*.js',
+    docsStyles: 'src/docs/assets/scss/**/*.scss',
+    scripts: 'src/js/**/*.js',
+    styles: 'src/scss/**/*.scss'
 }
 
 // Distribution Path
 const dist = {
     root: 'dist',
     docs: 'docs',
-    docsStyles: 'docs/assets/css',
     docsScripts: 'docs/assets/js',
-    scripts: 'dist',
+    docsStyles: 'docs/assets/css',
+    scripts: 'dist/js',
+    styles: 'dist/css',
 }
 
 // Develop Path
 const build = {
     root: 'build',
-    docs: 'build',
-    scripts: 'build/assets/js',
-    styles: 'build/assets/css'
+    docs: 'build/docs',
+    docsScripts: 'build/docs/assets/js',
+    docsStyles: 'build/docs/assets/css',
+    scripts: 'build/js',
+    styles: 'build/css'
 }
 
-gulp.task('html', () => {
+gulp.task('docs-html', () => {
     return gulp.src(src.docs + '/**/*.html')
-        .pipe(gulp.dest(build.root))
+        .pipe(gulp.dest(build.docs))
+        .pipe(htmlreplace({
+            'docs-js': '<link rel="stylesheet" href="assets/js/docs.min.js">',
+            'docs-css': '<link rel="stylesheet" href="assets/css/style.min.css">',
+            'spacer-css': '<link rel="stylesheet" href="assets/css/spacer.min.css">',
+            'spacer-js': '<script src="assets/js/spacer.min.js"></script>'
+        }))
         .pipe(htmlmin({
             removeComments: true,
             collapseWhitespace: true,
@@ -65,12 +77,49 @@ gulp.task('html', () => {
             minifyCSS: true
         }))
         .pipe(gulp.dest(dist.docs))
-        .pipe(browserSync.stream({ once: true }));
+        .pipe(browserSync.stream({once: true}));
 });
+
+//compile docs scss into css
+gulp.task('docs-css', () => {
+    return gulp.src(src.docsStyles)
+        .pipe(sourcemaps.init())
+        .pipe(sass().on('error', sass.logError))
+        .pipe(autoprefixer({
+            browsersList: [
+                "last 2 versions",
+                "ie >= 11"
+            ]
+        }))
+        .pipe(sourcemaps.write(''))
+        .pipe(gulp.dest(build.docsStyles))
+        .pipe(gulp.dest(dist.docsStyles))
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(filter('**/*.css'))
+        .pipe(minifyCSS())
+        .pipe(sourcemaps.write(''))
+        .pipe(filter('**/*.css'))
+        .pipe(rename({extname: '.min.css'}))
+        .pipe(gulp.dest(dist.docsStyles))
+        .pipe(filter('**/*.css'))
+        .pipe(browserSync.stream({once: true}));
+});
+
+gulp.task('docs-js', () => {
+    return gulp.src(src.docsScripts)
+        .pipe(gulp.dest(build.docsScripts))
+        .pipe(gulp.dest(dist.docsScripts))
+        .pipe(uglify())
+        .pipe(rename({extname: '.min.js'}))
+        .pipe(gulp.dest(dist.docsScripts))
+        .pipe(browserSync.stream({once: true}));
+});
+
+gulp.task('docs', gulp.series('docs-html', 'docs-css', 'docs-js'));
 
 //compile scss into css
 gulp.task('css', () => {
-    return gulp.src(src.docStyles)
+    return gulp.src(src.styles)
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
@@ -81,19 +130,26 @@ gulp.task('css', () => {
         }))
         .pipe(sourcemaps.write(''))
         .pipe(gulp.dest(build.styles))
-        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(gulp.dest(build.docsStyles))
+        .pipe(gulp.dest(dist.docsStyles))
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(filter('**/*.css'))
         .pipe(minifyCSS())
         .pipe(sourcemaps.write(''))
+        .pipe(gulp.dest(dist.styles))
         .pipe(gulp.dest(dist.docsStyles))
         .pipe(filter('**/*.css'))
-        .pipe(browserSync.stream({ once: true }));
+        .pipe(rename({extname: '.min.css'}))
+        .pipe(gulp.dest(dist.styles))
+        .pipe(gulp.dest(dist.docsStyles))
+        .pipe(filter('**/*.css'))
+        .pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('copy-js-to-dev', () => {
     return gulp.src(src.scripts)
         .pipe(gulp.dest(build.scripts))
-        .pipe(browserSync.stream({ once: true }));
+        .pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('combine-js', () => {
@@ -101,7 +157,7 @@ gulp.task('combine-js', () => {
         entries: [build.scripts + '/spacer.js'],
         debug: true
     })
-        .transform('babelify', { presets: ['es2015'] })
+        .transform('babelify', {presets: ['es2015']})
         .bundle()
         .pipe(source("spacer.js"))
         .pipe(gulp.dest(dist.scripts));
@@ -109,10 +165,11 @@ gulp.task('combine-js', () => {
 
 gulp.task('compress-js', () => {
     return gulp.src(dist.scripts + '/**/*.js')
-        .pipe(filter(file=>!/min\.js$/.test(file.path)))
+        .pipe(filter(file => !/min\.js$/.test(file.path)))
         .pipe(uglify())
         .pipe(gulp.dest(dist.docsScripts))
-        .pipe(rename({ extname: '.min.js' }))
+        .pipe(rename({extname: '.min.js'}))
+        .pipe(gulp.dest(dist.docsScripts))
         .pipe(gulp.dest(dist.scripts));
 });
 
@@ -123,17 +180,19 @@ gulp.task('watch', gulp.series(() => {
         notify: false,
         port: 3000,
         server: {
-            baseDir: "./build",
-            index: "/index.html"
+            baseDir: "./" + build.root,
+            directory: true
         },
         watchOptions: {
             awaitWriteFinish: true
         }
     });
 
-    gulp.watch(src.docs + '/**/*.html', gulp.parallel('html'));
-    gulp.watch(src.docStyles, gulp.parallel('css'));
+    gulp.watch(src.docs + '/**/*.html', gulp.parallel('docs-html'));
+    gulp.watch(src.docsStyles, gulp.parallel('docs-css'));
+    gulp.watch(src.docsScripts, gulp.parallel('docs-js'));
+    gulp.watch(src.styles, gulp.parallel('css'));
     gulp.watch(src.scripts, gulp.parallel('js'));
 }));
 
-gulp.task('default', gulp.series(gulp.parallel('html', 'css', 'js'), gulp.parallel('watch')));
+gulp.task('default', gulp.series(gulp.parallel('css', 'js', 'docs'), gulp.parallel('watch')));
