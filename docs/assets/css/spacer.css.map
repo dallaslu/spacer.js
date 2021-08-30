@@ -1,0 +1,1 @@
+{"version":3,"sources":["spacer.scss"],"names":[],"mappings":"AAAA,M,CACE,W,CACA,oB,CAFF,a,CAKI,U","file":"spacer.css","sourcesContent":["spacer {\r\n  width: .25em;\r\n  display: inline-block;\r\n\r\n  &::after {\r\n    content: '';\r\n  }\r\n}"]}
