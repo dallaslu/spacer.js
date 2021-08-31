@@ -102,7 +102,8 @@ class Spacer {
             if (curIsSpace && options.forceUnifiedSpacing) {
                 cur = options.spacingContent;
             }
-            if (!curIsSpace && REGEXP_STARTS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED.test(cur)) {
+            if (!curIsSpace && (REGEXP_STARTS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED.test(cur)
+                || /\.$/.test(acc) && /^[0-9]+[%]?$/.test(cur))) {
                 return acc + cur;
             }
             if (options.wrapper) {

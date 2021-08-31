@@ -73,9 +73,12 @@ function spaceNode(spacer, node, options) {
             if (arr.length == 1) {
                 return;
             }
+            console.log(arr);
             for (let i = 0; i < arr.length; i++) {
                 let isSpacing = /^[ ]*$/.test(arr[i]);
-                if (isSpacing || (i != 0 && !/^[ ]*$/.test(arr[i - 1]) && !Spacer.startsWithSymbolsNeedSpaceFollowed(arr[i]))) {
+                if (isSpacing || (i != 0 && !/^[ ]*$/.test(arr[i - 1])
+                    && !Spacer.startsWithSymbolsNeedSpaceFollowed(arr[i])
+                    && !(/\.$/.test(arr[i - 1]) && /^[0-9]+[%]?$/.test(arr[i])))) {
                     let spaceContent = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (isSpacing && optionsEffect.keepOriginalSpace) ? arr[i] : '';
                     insertBefore(createNode(optionsEffect.wrapper.open + spaceContent + optionsEffect.wrapper.close), node);
                 }
