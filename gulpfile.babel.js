@@ -61,7 +61,7 @@ gulp.task('docs-html', () => {
     return gulp.src(src.docs + '/**/*.html')
         .pipe(gulp.dest(build.docs))
         .pipe(htmlreplace({
-            'docs-js': '<script href="assets/js/docs.min.js"></script>',
+            'docs-js': '<script src="assets/js/docs.min.js"></script>',
             'docs-css': '<link rel="stylesheet" href="assets/css/style.min.css">',
             'spacer-css': '<link rel="stylesheet" href="assets/css/spacer.min.css">',
             'spacer-js': '<script src="assets/js/spacer.min.js"></script>',
