@@ -64,7 +64,8 @@ gulp.task('docs-html', () => {
             'docs-js': '<link rel="stylesheet" href="assets/js/docs.min.js">',
             'docs-css': '<link rel="stylesheet" href="assets/css/style.min.css">',
             'spacer-css': '<link rel="stylesheet" href="assets/css/spacer.min.css">',
-            'spacer-js': '<script src="assets/js/spacer.min.js"></script>'
+            'spacer-js': '<script src="assets/js/spacer.min.js"></script>',
+            'spacer-run-js': '<script>new Spacer({forceUnifiedSpacing: true}).spacePage()</script>'
         }))
         .pipe(htmlmin({
             removeComments: true,

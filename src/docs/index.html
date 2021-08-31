@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
     <title>Spacer分隔器</title>
 
-    <!-- build:docs-css -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    <!-- endbuild -->
     <!-- build:spacer-css -->
     <link rel="stylesheet" href="../css/spacer.css">
+    <!-- endbuild -->
+    <!-- build:docs-css -->
+    <link rel="stylesheet" href="assets/css/style.css">
     <!-- endbuild -->
     <!-- build:spacer-js -->
     <script type="module" src="../js/spacer.js"></script>
@@ -16,85 +18,103 @@
 </head>
 <body>
 <header>
-    <h1>Spacer隔离器</h1>
+    <div class="container">
+        <h1>Spacer隔离器</h1>
+    </div>
 </header>
 <main>
-    <h2>一、中文示例</h2>
-    <h3>1. 常规</h3>
-    <p><a href="https://github.com/sparanoid/chinese-copywriting-guidelines">中文文案排版指北</a></p>
-    <h4>a. 中英文之间需要增加空格</h4>
-    <p>在LeanCloud上，数据存储是围绕AVObject进行的。每个AVObject都包含了与JSON兼容的key-value对应的数据。数据是schema-free的，你不需要在每个AVObject上提前指定存在哪些键，只要直接设定对应的key-value即可。</p>
-    <h4>b. 中文与数字之间需要增加空格</h4>
-    <p>今天出去买菜花了5000元。</p>
-    <h4>c. 全角标点与其他字符之间不加空格</h4>
-    <p>刚刚买了一部iPhone，好开心！</p>
-    <p>但是，iPhone的刘海有点儿大！Android倒是有屏占比更大的型号。But iPhone is iPhone! 尤其当你读过《This book does not exsit》，你就会不再怀念BlackBerry、WebOS的手机。</p>
-    <h4>d. 百分比与数字之间不需要增加空格</h4>
-    <p>新MacBook Pro有15%的CPU性能提升。</p>
-    <h4>e. 半角逗号、冒号、点号，之前不需要加空格，之后需要加空格；若处于段尾则不需要空格。</h4>
-    <p>He said:Let part of people get rich first!</p>
-    <p>He said,<span style="color: blue">Let part of people get rich first!</span></p>
-    <h3>2. 大字体</h3>
-    <p style="font-size: 2rem">中文ABC，世界World，Global全球500强，100%纯牛奶。</p>
-    <h3>3. 图片ALT文本</h3>
-    <img alt="时髦人都很fancy"/>
-    <h3>4. 标签（span/font等）混排</h3>
-    <p>中文<span style="color:#333">ABC</span>，<span style="color:blue">世界</span>World，<span
-            style="color:red">Global</span><span style="color: deeppink">全球500强</span>，100%纯牛奶。</p>
-    <h3>5. text-align: justify</h3>
-    <p style="width: 150px; text-align: justify">中文ABC，世界World，Global全球500强，100%纯牛奶。</p>
-    <p style="width: 150px; text-align: justify">中文<span style="color:#333">ABC</span>，<span style="color:blue">世界</span>World，<span
-            style="color:red">Global</span><span style="color: deeppink">全球500强</span>，100%纯牛奶。</p>
-    <h3>6. 其他</h3>
-    <p><strong>pre</strong></p>
-    <pre>中文ABC，世界World，Global全球500强，100%纯牛奶。</pre>
-    <p><strong>textarea</strong></p>
-    <textarea>中文ABC，世界World，Global全球500强，100%纯牛奶。</textarea>
-    <p><strong>input</strong></p>
-    <input value="中文ABC，世界World，Global全球500强，100%纯牛奶。" style="width: 100%"/>
-    <p><strong>button</strong></p>
-    <p>input:</p>
-    <input value="中文ABC，世界World，Global全球500强，100%纯牛奶。" type="button"/>
-    <p>button:</p>
-    <button>中文ABC，世界World，Global全球500强，100%纯牛奶。</button>
-    <p><strong>checkbox</strong></p>
-    <label><input type="checkbox"/>中文ABC，世界World，Global全球500强，100%纯牛奶。</label>
-    <p><strong>radio</strong></p>
-    <label><input type="radio"/>中文ABC，世界World，Global全球500强，100%纯牛奶。</label>
-    <p><strong>placeholder</strong></p>
-    <input placeholder="中文ABC，世界World，Global全球500强，100%纯牛奶。" style="width: 100%"/>
-    <p><strong>select</strong></p>
-    <select>
-        <optgroup label="中文ABC">
-            <option>中文ABC，世界World，Global全球500强，100%纯牛奶。</option>
-            <option>中文ABC，世界World，Global全球500强，100%纯牛奶。</option>
-        </optgroup>
-    </select>
-    <p><strong>code</strong></p>
-    <code>中文ABC，世界World，Global全球500强，100%纯牛奶。</code>
-    <p><strong>blockqoute</strong></p>
-    <blockquote>中文ABC，世界World，Global全球500强，100%纯牛奶。</blockquote>
-    <p><strong>ul</strong></p>
-    <ul>
-        <li>中文ABC，世界World，Global全球500强，100%纯牛奶。</li>
-    </ul>
-    <p><strong>contenteditable</strong></p>
-    <div contenteditable="true" style="border:#333 1px solid; width: 50%; height: 200px;">中文ABC，世界World，Global全球500强，100%纯牛奶。</div>
-    <h2>二、日本語</h2>
-    <p>ワールドWorld、Globalグローバル500、100%純粋なミルク。 </p>
-    <h2>三、한국인</h2>
-    <p>세계World, Global세계500위권, 100%순우유.</p>
+    <div class="container">
+        <h2>一、中文示例</h2>
+        <h3>1. 常规</h3>
+        <p><a href="https://github.com/sparanoid/chinese-copywriting-guidelines">中文文案排版指北</a></p>
+        <h4>a. 中英文之间需要增加空格</h4>
+        <p>Halo啊，饭已OK了，下来めし吧！</p>
+        <h4>b. 中文与数字之间需要增加空格</h4>
+        <p>7月末中国外汇储备32359亿美元，创2016年以来新高值。</p>
+        <h4>c. 全角标点与其他字符之间不加空格</h4>
+        <p>正如素有“Web开发圣经”之称的名著《本书does not exist》（Nobody著）所描述的那样，iOS与macOS版本的Safari一直以来都对正则缺乏完整支持，比如：Lookahead表达式。</p>
+        <h4>d. 百分比与数字之间不需要增加空格</h4>
+        <p>乔·拜登在美国2020年大选中获得了51.3%的选票。</p>
+        <h4>e. 半角逗号、冒号、点号，之前不需要加空格，之后需要加空格；若处于段尾则不需要空格。</h4>
+        <p>He said:Let some people get rich first!</p>
+        <p>He said,<span style="color: blue">Let some people get rich first!</span></p>
+        <h4>f. 原文含空格</h4>
+        <p>Potato 你个西红柿，tomato 你个马铃薯。</p>
+        <h3>2. 大字体</h3>
+        <p style="font-size: 2rem">热烈欢迎Rebecca同志莅临FB指导工作！</p>
+        <h3>3. 图片ALT属性</h3>
+        <img alt="时髦人都很fancy"/>
+        <h3>4. 标签（span/font等）混排</h3>
+        <p><del style="color:crimson;background:lightpink">你</del><span style="color: lightseagreen; background: palegreen">我</span>觉得，<span style="color:dimgrey">iPhone手机</span>与<span
+                style="color:green">Android手机</span>各有特色。</p>
+        <h3>5. text-align: justify</h3>
+        <p style="width: 150px; text-align: justify">中文ABC，世界World，Global全球500强，100%纯牛奶。</p>
+        <p style="width: 150px; text-align: justify">中文<span style="color:#333">ABC</span>，<span style="color:blue">世界</span>World，<span
+                style="color:red">Global</span><span style="color: deeppink">全球500强</span>，100%纯牛奶。</p>
+        <h3>6. 其他</h3>
+        <p><strong>pre</strong></p>
+        <pre>这是最后的斗争
+团结起来
+到明天
+International就一定要实现</pre>
+        <p><strong>textarea</strong></p>
+        <textarea>Spacer支持自定义的间隔内容，从而可以使用CSS精确控制其宽度。</textarea>
+        <p><strong>input</strong></p>
+        <input value="在CSS控制间隔宽度需要使用em单位" style="width: 100%"/>
+        <p><strong>button</strong></p>
+        <p>input:</p>
+        <input value="1em代表一个全角字符的宽度" type="button"/>
+        <p>button:</p>
+        <button>若使用25%则表示父元素宽度的四分之一</button>
+        <p><strong>checkbox</strong></p>
+        <label><input type="checkbox"/>使用CSS控制需要指定wrapper</label>
+        <p><strong>radio</strong></p>
+        <label><input type="radio"/>wrapper包括open、close两个属性</label>
+        <p><strong>placeholder</strong></p>
+        <input placeholder="无论是否指定wrapper，在处理title标签内容时始终使用空格" style="width: 100%"/>
+        <p><strong>select</strong></p>
+        <select>
+            <optgroup label="与title同样使用空格的内容">
+                <option>optgroup的label属性</option>
+                <option>img的alt属性</option>
+                <option>input的placeholder属性</option>
+            </optgroup>
+        </select>
+        <p><strong>code</strong></p>
+        <code>但诸如input的value等表单数据属性，暂未做处理。</code>
+        <p><strong>blockqoute</strong></p>
+        <blockquote>处理网页上的内容间隔时，script、style、link等元素均会被忽略。</blockquote>
+        <p><strong>ul</strong></p>
+        <ul>
+            <li>部分以空格为间隔的情况，将会替换为 &amp;nbsp;</li>
+        </ul>
+        <p><strong>contenteditable</strong></p>
+        <div contenteditable="true" style="border:#333 1px solid; width: 50%; height: 200px;">contentediatabl为true时，实时输入的内容尚不支持间隔。</div>
+        <h2>二、日本語</h2>
+        <p>ワールドWorld、Globalグローバル500、100%純粋なミルク。</p>
+        <h2>三、한국인</h2>
+        <p>세계World, Global세계500위권, 100%순우유.</p>
+    </div>
 </main>
 <!-- build:docs-js -->
 <script src="assets/js/docs.js"></script>
 <!-- endbuild -->
+<!-- build:spacer-run-js -->
 <script>
     window.addEventListener('load', function () {
         let spacer = new Spacer({
+            wrapper:{
+                open: '<spacer>',
+                close: '</spacer>'
+            },
+            spacingContent: ' ',
+            handleOriginalSpace: true,
+            keepOriginalSpace: true,
             forceUnifiedSpacing: true
         });
         spacer.spacePage();
     });
 </script>
+<!-- endbuild -->
 </body>
 </html>

@@ -75,7 +75,7 @@ function spaceNode(spacer, node, options) {
             }
             for (let i = 0; i < arr.length; i++) {
                 let isSpacing = /^[ ]*$/.test(arr[i]);
-                if (isSpacing || (i != 0 && !/^[ ]*$/.test(arr[i - 1]))) {
+                if (isSpacing || (i != 0 && !/^[ ]*$/.test(arr[i - 1]) && !Spacer.startsWithSymbolsNeedSpaceFollowed(arr[i]))) {
                     let spaceContent = optionsEffect.forceUnifiedSpacing ? optionsEffect.spacingContent : (isSpacing && optionsEffect.keepOriginalSpace) ? arr[i] : '';
                     insertBefore(createNode(optionsEffect.wrapper.open + spaceContent + optionsEffect.wrapper.close), node);
                 }
