@@ -61,11 +61,20 @@ gulp.task('docs-html', () => {
     return gulp.src(src.docs + '/**/*.html')
         .pipe(gulp.dest(build.docs))
         .pipe(htmlreplace({
-            'docs-js': '<link rel="stylesheet" href="assets/js/docs.min.js">',
+            'docs-js': '<script href="assets/js/docs.min.js"></script>',
             'docs-css': '<link rel="stylesheet" href="assets/css/style.min.css">',
             'spacer-css': '<link rel="stylesheet" href="assets/css/spacer.min.css">',
             'spacer-js': '<script src="assets/js/spacer.min.js"></script>',
-            'spacer-run-js': '<script>new Spacer({forceUnifiedSpacing: true}).spacePage()</script>'
+            'spacer-run-js': `<script>
+    new Spacer({
+        wrapper:{
+            open: '<spacer>',
+            close: '</spacer>'
+        },
+        handleOriginalSpace: true,
+        forceUnifiedSpacing: true
+    }).spacePage()
+</script>`
         }))
         .pipe(htmlmin({
             removeComments: true,
