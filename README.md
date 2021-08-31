@@ -3,6 +3,8 @@ Typographical word spacing
 
 ## Example
 
+Online Demo: <https://dallaslu.github.io/spacer.js/>
+
 ```html
 <!DOCTYPE html>
 <html>
