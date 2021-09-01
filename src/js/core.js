@@ -168,7 +168,7 @@ class Spacer {
     }
 
     resolveOptions(options) {
-        return options ? handleOptions(options) : this.options;
+        return options ? Object.assign({}, this.options, wrapOptions(options)) : this.options;
     }
 
     static endsWithCJKAndSpacing(text) {

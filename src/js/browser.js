@@ -14,10 +14,13 @@ class BrowserSpacer extends Spacer {
     }
 
     spacePage(elements, options, observe) {
-        elements = typeof elements === 'string' ? document.querySelectorAll(elements) : (elements || [document.childNodes[1]]);
+        elements = typeof elements === 'string' ? document.querySelectorAll(elements) : (elements || document);
         options = this.resolveOptions(options);
         if (options.wrapper) {
             options.spacingContent = options.spacingContent.replace(' ', '&nbsp;');
+        }
+        if(!elements.forEach){
+            elements = [elements];
         }
         elements.forEach(e => {
             spaceNode(this, e, options);

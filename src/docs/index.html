@@ -118,16 +118,7 @@ International就一定要实现</pre>
             keepOriginalSpace: true,
             forceUnifiedSpacing: true
         });
-        spacer.spacePage([document.childNodes[1]], {
-            wrapper:{
-                open: '<spacer>',
-                close: '</spacer>'
-            },
-            spacingContent: ' ',
-            handleOriginalSpace: true,
-            keepOriginalSpace: true,
-            forceUnifiedSpacing: true
-        }, true);
+        spacer.spacePage(document, {}, true);
     });
 </script>
 <!-- endbuild -->
