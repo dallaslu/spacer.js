@@ -13,14 +13,36 @@ class BrowserSpacer extends Spacer {
         }
     }
 
-    spacePage(elements, options) {
+    spacePage(elements, options, observe) {
         elements = typeof elements === 'string' ? document.querySelectorAll(elements) : (elements || [document.childNodes[1]]);
         options = this.resolveOptions(options);
         if (options.wrapper) {
             options.spacingContent = options.spacingContent.replace(' ', '&nbsp;');
         }
-        [].forEach.call(elements, e => {
+        elements.forEach(e => {
             spaceNode(this, e, options);
+            if (observe) {
+                let observer = new MutationObserver((mutations, observer) => {
+                    observer.disconnect();
+                    mutations.forEach(m => {
+                        if (m.type === 'childList') {
+                            this.spacePage(m.addedNodes, options, false);
+                        }
+                    });
+                    connect();
+                });
+                let connect = function(){
+                    observer.observe(e, {
+                        characterData: true,
+                        childList: true,
+                        attributes: true,
+                        subtree: true,
+                        attributeOldValue: true,
+                        characterDataOldValue: true
+                    });
+                }
+                connect();
+            }
         });
     }
 }
