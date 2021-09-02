@@ -1,10 +1,7 @@
 import gulp from 'gulp';
-import concat from 'gulp-concat';
 import rename from 'gulp-rename';
 import filter from 'gulp-filter';
-import terser from 'gulp-terser';
 import sourcemaps from 'gulp-sourcemaps';
-import htmltidy from 'gulp-htmltidy';
 import htmlmin from 'gulp-htmlmin';
 
 import browserify from 'browserify';
@@ -12,17 +9,8 @@ import source from 'vinyl-source-stream'
 
 import sass from 'gulp-sass';
 import minifyCSS from 'gulp-csso';
-import postcss from 'gulp-postcss';
-
-import swig from 'gulp-swig';
-import frontMatter from 'gulp-front-matter';
-import htmlbeautify from 'gulp-html-beautify';
 import uglify from 'gulp-uglify';
-
-import dele from 'delete';
 import autoprefixer from 'gulp-autoprefixer';
-import through from "through2";
-import path from "path";
 import htmlreplace from 'gulp-html-replace';
 
 import browserSync from 'browser-sync';
