@@ -16,9 +16,7 @@ Spacer.config({
 class BrowserSpacer extends Spacer {
 
     constructor(options) {
-
         super(options);
-
         if (options.wrapper) {
             this.options.spacingContent = this.options.spacingContent.replace(' ', '&nbsp;');
         }
@@ -65,7 +63,6 @@ function spaceNode(spacer, node, options) {
     if (node.tagName && IGNORED_TAGS.test(node.tagName) || node.nodeType === Node.COMMENT_NODE) {
         return;
     }
-    console.log(node.tagName + ':' + node.nodeType);
     let optionsNoWrapper = Object.assign({}, options, {wrapper: false});
     let optionsNoWrapperNoHTMLEntity = Object.assign({}, optionsNoWrapper, {
         spacingContent: options.spacingContent.replace('&nbsp;', ' ')
@@ -130,7 +127,6 @@ function spaceNode(spacer, node, options) {
             } else {
                 spaceAttribute(spacer, node, 'data', optionsNoWrapper);
             }
-
         }
     } else {
         // tag attr map
