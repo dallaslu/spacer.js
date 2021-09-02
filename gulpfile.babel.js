@@ -61,7 +61,7 @@ gulp.task('docs-html', () => {
         },
         handleOriginalSpace: true,
         forceUnifiedSpacing: true
-    }).spacePage()
+    }).spacePage(document, {}, true)
 </script>`
         }))
         .pipe(htmlmin({
