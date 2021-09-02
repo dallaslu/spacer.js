@@ -1,6 +1,8 @@
 /*
  *
  */
+import Snippet from "./snippet.js";
+
 const LOOKBEHIND_SUPPORTED = (() => {
     try {
         new RegExp('(?<=exp)');
@@ -41,6 +43,7 @@ const SPLIT_SPACE = `${SPLIT_AJK_SPACE_LATIN_LIKE}|${SPLIT_LATIN_LIKE_SPACE_AJK}
 const SPLIT_SYMBOLS_NEED_SPACE_FOLLOWED = buildSplit(`${SYMBOLS_NEED_SPACE_FOLLOWED}`, '', `${ONE_AJK}|${ONE_LATIN}`);
 const SPLIT_AJK_LATIN_LIKE = buildSplit(`${ONE_LATIN_LIKE}`, '', `${ONE_AJK}`);
 const SPLIT_LATIN_LIKE_AJK = buildSplit(`${ONE_AJK}`, '', `${ONE_LATIN_LIKE}`);
+const REGEXP_SPACES = new RegExp(`^${ONE_OR_MORE_SPACE}$`);
 const REGEXP_ANY_CJK = new RegExp(`${ONE_AJK}`);
 const REGEXP_ENDS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED = new RegExp(`${SYMBOLS_NEED_SPACE_FOLLOWED}$`);
 const REGEXP_STARTS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED = new RegExp(`^${SYMBOLS_NEED_SPACE_FOLLOWED}`);
@@ -94,64 +97,90 @@ class Spacer {
     }
 
     space(text, options) {
-        let arr = this.split(text, options);
-        options = this.resolveOptions(options);
-        return arr.reduce((acc, cur, i, src) => {
-            let spacingContent = '';
-            let curIsSpace = /^[ ]*$/.test(cur);
-            if (curIsSpace && options.forceUnifiedSpacing) {
-                cur = options.spacingContent;
-            }
-            if (!curIsSpace && (REGEXP_STARTS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED.test(cur)
-                || /\d+\.$/.test(acc) && /^\d+[%]?$/.test(cur)
-                || /\d+:$/.test(acc) && /^\d+/.test(cur))) {
-                return acc + cur;
-            }
-            if (options.wrapper) {
-                if (curIsSpace) {
-                    if (options.keepOriginalSpace) {
-                        cur = options.wrapper.open + cur + options.wrapper.close;
-                    } else {
-                        cur = options.wrapper.open + options.wrapper.close;
-                    }
-                } else {
-                    spacingContent = options.wrapper.open + options.wrapper.close;
+        return this.custom(options, (step, opts) => {
+            return this.split(text, opts).reduce((acc, cur, i, src) => {
+                return step({
+                    current: cur,
+                    acc: acc,
+                    i: i,
+                    src: src
+                });
+            }, '');
+        }, c => c.i == 0 ? null : c.src[c.i - 1], c => null, (opts, c, add, s, append) => {
+            if (add) {
+                if (opts.wrapper) {
+                    s = `${opts.wrapper.open}${s}${opts.wrapper.close}`;
                 }
-            } else {
-                if (curIsSpace) {
-                    if (options.keepOriginalSpace) {
-                        cur = cur;
-                    } else {
-                        cur = options.spacingContent;
-                    }
-                } else {
-                    spacingContent = options.spacingContent;
-                }
+                return `${c.acc}${s}${append}`;
             }
-            return acc + spacingContent + cur;
+            return `${c.acc}${append}`;
         });
     }
 
+    custom(options, prepare, prevSolver, nextSolver, splicer) {
+        options = this.resolveOptions(options);
+        return prepare(context => {
+            let cur = context.current;
+            let spacingContent = options.spacingContent;
+            let append = '';
+            let addSpace = false;
+
+            if (Spacer.isSpaces(cur)) {
+                addSpace = true;
+                if (!options.forceUnifiedSpacing && options.keepOriginalSpace) {
+                    spacingContent = cur.text;
+                }
+            } else {
+                append = cur.text;
+                let prev = prevSolver(context, options);
+                if (prev) {
+                    if (Spacer.endsWithSymbolsNeedSpaceFollowed(prev)) {
+                        if (prev.is(/\.$/) && cur.is(/^\d+/)
+                            || prev.is(/:$/) && cur.is(/^\d+/)) {
+                            addSpace = false;
+                        } else {
+                            addSpace = true;
+                        }
+                    } else if (Spacer.endsWithCJK(prev) && Spacer.startsWithLatin(cur)
+                        || Spacer.endsWithLatin(prev) && Spacer.startsWithCJK(cur)) {
+                        // between CJK and Latin-like(English letters, numbers, etc.)
+                        addSpace = true;
+                    }
+                }
+            }
+            return splicer(options, context, addSpace, spacingContent, append);
+        }, options);
+    }
+
+    /**
+     * Split to Snippet[]
+     * @param text
+     * @param options
+     * @returns {Snippet[]}
+     */
     split(text, options) {
         options = this.resolveOptions(options);
         if (typeof text === 'string') {
             let pattern = options.handleOriginalSpace ? REGEXP_SPLIT_SPACE : REGEXP_SPLIT_DEFAULT;
-            let arr = text.split(pattern);
+            let arr = text.split(pattern)
+                .filter((cur) => cur !== '' && cur !== undefined)
+                .map((cur, i, src) => new Snippet(cur));
             if (arr.length > 1 && !LOOKBEHIND_SUPPORTED) {
-                let result = [];
-                arr.flatMap((cur, i, src) => {
+                arr = arr.flatMap((cur, i, src) => {
                     // 'Spacer 间隔器'=>['Space', 'r ', '间隔器']=>['Space','r',' ', '', '间隔器']
-                    if (cur !== undefined && cur.length > 0) {
-                        return cur.split(REGEXP_SPLIT_END_SPACE);
+                    if (cur.is(`${ANY_SPACE}$`)) {
+                        return cur.text.split(REGEXP_SPLIT_END_SPACE).map(cur => new Snippet(cur));
                     }
-                    return [];
-                }).forEach((cur, i, src) => {
+                    return cur;
+                })
+                let result = [];
+                arr.forEach((cur, i, src) => {
                     // 'Spacer间隔器'=>['Space', 'r', '间隔器']=>['Spacer', '间隔器']
-                    if (cur.length == 1 && i > 0 && !/^[ ]*$/.test(cur)) {
+                    if (cur.text.length == 1 && i > 0 && !cur.is(/^[ ]*$/)) {
                         let prev = src[i - 1];
                         if (!Spacer.endsWithCJK(prev) && !Spacer.startsWithCJK(cur)
                             || !Spacer.endsWithLatin(prev) && !Spacer.startsWithLatin(cur)) {
-                            result[result.length - 1] += cur;
+                            result[result.length - 1] = new Snippet(result[result.length - 1] + cur);
                             return;
                         }
                     }
@@ -159,12 +188,9 @@ class Spacer {
                 });
                 arr = result;
             }
-            return arr.filter((cur, i, src) => {
-                // ['Spacer',' ', '', '间隔器']=>['Spacer',' ', '间隔器']
-                return cur !== '';
-            });
+            return arr;
         }
-        return [text];
+        return [new Snippet(text)];
     }
 
     resolveOptions(options) {
@@ -172,36 +198,48 @@ class Spacer {
     }
 
     static endsWithCJKAndSpacing(text) {
-        return REGEXP_ENDS_WITH_CJK_AND_SPACING.test(text);
+        return test(REGEXP_ENDS_WITH_CJK_AND_SPACING, text);
     }
 
     static endsWithCJK(text) {
-        return REGEXP_ENDS_WITH_CJK.test(text);
+        return test(REGEXP_ENDS_WITH_CJK, text);
     }
 
     static endsWithLatin(text) {
-        return REGEXP_ENDS_WITH_LATIN.test(text);
+        return test(REGEXP_ENDS_WITH_LATIN, text);
     }
 
     static startsWithCJK(text) {
-        return REGEXP_STARTS_WITH_CJK.test(text);
+        return test(REGEXP_STARTS_WITH_CJK, text);
     }
 
     static startsWithLatin(text) {
-        return REGEXP_STARTS_WITH_LATIN.test(text);
+        return test(REGEXP_STARTS_WITH_LATIN, text);
     }
 
     static endsWithLatinAndSpacing(text) {
-        return REGEXP_ENDS_WITH_LATIN_AND_SPACING.test(text);
+        return test(REGEXP_ENDS_WITH_LATIN_AND_SPACING, text);
     }
 
     static endsWithSymbolsNeedSpaceFollowed(text) {
-        return REGEXP_ENDS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED.test(text);
+        return test(REGEXP_ENDS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED, text);
     }
 
     static startsWithSymbolsNeedSpaceFollowed(text) {
-        return REGEXP_STARTS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED.test(text);
+        return test(REGEXP_STARTS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED, text);
     }
+
+    static isSpaces(text) {
+        return test(REGEXP_SPACES, text);
+    }
+
+    static createSnippet(text){
+        return new Snippet(text);
+    }
+}
+
+function test(regexp, text) {
+    return text instanceof Snippet ? text.is(regexp) : regexp.test(text);
 }
 
 function wrapOptions(options) {
