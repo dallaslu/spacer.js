@@ -47,8 +47,9 @@ const REGEXP_SPACES = new RegExp(`^${ONE_OR_MORE_SPACE}$`);
 const REGEXP_ANY_CJK = new RegExp(`${ONE_AJK}`);
 const REGEXP_ENDS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED = new RegExp(`${SYMBOLS_NEED_SPACE_FOLLOWED}$`);
 const REGEXP_STARTS_WITH_SYMBOLS_NEED_SPACE_FOLLOWED = new RegExp(`^${SYMBOLS_NEED_SPACE_FOLLOWED}`);
-const REGEXP_ENDS_WITH_CJK_AND_SPACING = new RegExp(`${ONE_AJK}${ONE_OR_MORE_SPACE}$`);
-const REGEXP_ENDS_WITH_LATIN_AND_SPACING = new RegExp(`${ONE_LATIN_LIKE}${ONE_OR_MORE_SPACE}$`);
+const REGEXP_ENDS_WITH_CJK_AND_SPACE = new RegExp(`${ONE_AJK}${ONE_OR_MORE_SPACE}$`);
+const REGEXP_ENDS_WITH_LATIN_AND_SPACE = new RegExp(`${ONE_LATIN_LIKE}${ONE_OR_MORE_SPACE}$`);
+const REGEXP_ENDS_WITH_ANY_SPACE = new RegExp(`${ANY_SPACE}$`);
 const REGEXP_ENDS_WITH_CJK = new RegExp(`${ONE_AJK}$`);
 const REGEXP_ENDS_WITH_LATIN = new RegExp(`${ONE_LATIN_LIKE}$`);
 const REGEXP_STARTS_WITH_CJK = new RegExp(`^${ONE_AJK}`);
@@ -168,7 +169,7 @@ class Spacer {
             if (arr.length > 1 && !LOOKBEHIND_SUPPORTED) {
                 arr = arr.flatMap((cur, i, src) => {
                     // 'Spacer 间隔器'=>['Space', 'r ', '间隔器']=>['Space','r',' ', '', '间隔器']
-                    if (cur.is(`${ANY_SPACE}$`)) {
+                    if (cur.is(REGEXP_ENDS_WITH_ANY_SPACE)) {
                         return cur.text.split(REGEXP_SPLIT_END_SPACE).map(cur => new Snippet(cur));
                     }
                     return cur;
@@ -198,7 +199,7 @@ class Spacer {
     }
 
     static endsWithCJKAndSpacing(text) {
-        return test(REGEXP_ENDS_WITH_CJK_AND_SPACING, text);
+        return test(REGEXP_ENDS_WITH_CJK_AND_SPACE, text);
     }
 
     static endsWithCJK(text) {
@@ -218,7 +219,7 @@ class Spacer {
     }
 
     static endsWithLatinAndSpacing(text) {
-        return test(REGEXP_ENDS_WITH_LATIN_AND_SPACING, text);
+        return test(REGEXP_ENDS_WITH_LATIN_AND_SPACE, text);
     }
 
     static endsWithSymbolsNeedSpaceFollowed(text) {
