@@ -1,6 +1,6 @@
 import Spacer from './core/core.js'
 
-const IGNORED_TAGS = /^(script|link|style)$/i;
+const IGNORED_TAGS = /^(script|link|style|code)$/i;
 const BLOCK_TAGS = /^(div|p|h1|h2|h3|h4|h5|h6|blockqoute|pre|textarea|nav|header|main|footer|section|sidbar|aside|table|li|ul|ol|dl)$/i;
 const SPACING_TAGS = /^(br|hr|img|video|audio)$/i;
 

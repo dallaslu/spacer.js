@@ -27,6 +27,19 @@ pre{
   max-width: 100%;
 }
 
+pre code {
+  display: block;
+  background-color: #ddd;
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+}
+
+.example{
+  border-radius: .5rem;
+  padding: .5rem 1rem;
+  border: 1px solid #aaa;
+  margin-bottom: .25rem;
+}
 /* X-Small devices (portrait phones, less than 576px)*/
 /* No media query for `xs` since this is the default in Bootstrap */
 
