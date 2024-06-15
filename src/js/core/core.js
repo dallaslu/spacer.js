@@ -136,7 +136,7 @@ class Spacer {
                 let prev = prevSolver(context, options);
                 if (prev) {
                     if (Spacer.endsWithSymbolsNeedSpaceFollowed(prev)) {
-                        if (prev.is(/\.$/) && cur.is(/^\d+/)
+                        if (prev.is(/\.$/) && cur.is(/^[a-z\d]+/)
                             || prev.is(/:$/) && cur.is(/^\d+/)) {
                             addSpace = false;
                         } else {
